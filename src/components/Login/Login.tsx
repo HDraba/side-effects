@@ -9,7 +9,6 @@ enum TypeEnum {
   INPUT_BLUR = 'INPUT_BLUR',
 }
 
-
 type EmailState = {
   value: string;
   isValid: boolean | null;
@@ -41,12 +40,12 @@ const emailReducer = (state: EmailState, action: EmailAction): EmailState => {
 type PasswordState = {
   value: string;
   isValid: boolean | null;
-}
+};
 
 type PasswordAction = {
   type: 'USER_INPUT' | 'INPUT_BLUR';
   val?: string;
-}
+};
 
 const passwordReducer = (state: PasswordState, action: PasswordAction) => {
   const { type, val } = action;
@@ -59,8 +58,7 @@ const passwordReducer = (state: PasswordState, action: PasswordAction) => {
     return { value: value, isValid: value.trim().length > 6 };
   }
   return { value: '', isValid: false };
-
-}
+};
 
 const Login = (props: LoginProps) => {
   // const [enteredEmail, setEnteredEmail] = useState('');
@@ -76,18 +74,32 @@ const Login = (props: LoginProps) => {
   const [emailState, dispatchEmail] = useReducer<
     Reducer<EmailState, EmailAction>
   >(emailReducer, initialState);
-  const [passwordState, dispatchPassword] = useReducer<Reducer<PasswordState, PasswordAction>>(passwordReducer, initialState)
+  const [passwordState, dispatchPassword] = useReducer<
+    Reducer<PasswordState, PasswordAction>
+  >(passwordReducer, initialState);
+
+  useEffect(() => {
+    const identifier = setTimeout(() => {
+      console.log('Checking form validity!');
+      setFormIsValid(emailState.isValid! && passwordState.isValid!);
+    }, 500);
+
+    return () => {
+      console.log('CLEANUP');
+      clearTimeout(identifier);
+    };
+  }, [emailState, passwordState]);
 
   const emailChangeHandler = (event: React.FormEvent<HTMLInputElement>) => {
     dispatchEmail({ type: 'USER_INPUT', val: event.currentTarget.value });
 
-    setFormIsValid(
-      event.currentTarget.value.includes('@') && passwordState.isValid!
-    );
+    // setFormIsValid(
+      // event.currentTarget.value.includes('@') && passwordState.isValid!
+    // );
   };
 
   const passwordChangeHandler = (event: React.FormEvent<HTMLInputElement>) => {
-    dispatchPassword({type: 'USER_INPUT', val: event.currentTarget.value})
+    dispatchPassword({ type: 'USER_INPUT', val: event.currentTarget.value });
     setFormIsValid(
       emailState.isValid! && event.currentTarget.value.trim().length > 6
     );
@@ -98,7 +110,7 @@ const Login = (props: LoginProps) => {
   };
 
   const validatePasswordHandler = () => {
-    dispatchPassword({type: 'INPUT_BLUR'})
+    dispatchPassword({ type: 'INPUT_BLUR' });
   };
 
   const submitHandler = (event: React.SyntheticEvent) => {
