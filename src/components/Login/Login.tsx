@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from 'react';
+import React, { useEffect, useReducer, useState, Reducer } from 'react';
 
 import Card from '../UI/Card/Card';
 import classes from './Login.module.css';
@@ -10,24 +10,28 @@ enum TypeEnum {
 }
 
 type EmailAction = {
-  type: TypeEnum;
+  type: 'USER_INPUT' | 'INPUT_BLUR'
   val?: string;
 };
 
 type EmailState = {
   value: string;
-  isValid: boolean;
+  isValid: boolean | undefined;
 };
 
 type LoginProps = {
   onLogin: (enteredEmail: string, enteredPassword: string) => void;
 };
 
-const emailReducer = (state: EmailState, action: EmailAction) => {
+const emailReducer = (state: EmailState, action: EmailAction): EmailState => {
   const { type, val } = action;
+  const { value, isValid } = state;
 
   if (type === 'USER_INPUT') {
-    return { value: val, isValid: val!.includes('@') };
+    return { value: val!, isValid: val!.includes('@') };
+  }
+  if (type === 'INPUT_BLUR') {
+    return { value: value, isValid: value.includes('@') };
   }
 
   return { value: '', isValid: false };
@@ -40,10 +44,13 @@ const Login = (props: LoginProps) => {
   const [passwordIsValid, setPasswordIsValid] = useState<boolean>();
   const [formIsValid, setFormIsValid] = useState(false);
 
-  const [emailState, dispatchEmail] = useReducer(emailReducer, {
+  const initialState: EmailState = {
     value: '',
-    isValid: false,
-  });
+    isValid: undefined,
+  };
+  const [emailState, dispatchEmail] = useReducer<
+    Reducer<EmailState, EmailAction>
+  >(emailReducer, initialState);
 
   // useEffect(() => {
   //   const timeoutIdentifier = setTimeout(() => {
@@ -67,7 +74,9 @@ const Login = (props: LoginProps) => {
     );
   };
 
-  const passwordChangeHandler = (event: React.FormEvent<HTMLInputElement>) => {
+  const passwordChangeHandler = (
+    event: React.FormEvent<HTMLInputElement>
+  ) => {
     setEnteredPassword(event.currentTarget.value);
     emailState.isValid && enteredPassword.trim().length > 6;
   };
