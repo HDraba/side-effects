@@ -10,13 +10,13 @@ enum TypeEnum {
 }
 
 type EmailAction = {
-  type: 'USER_INPUT' | 'INPUT_BLUR'
+  type: 'USER_INPUT' | 'INPUT_BLUR';
   val?: string;
 };
 
 type EmailState = {
   value: string;
-  isValid: boolean | undefined;
+  isValid: boolean | null;
 };
 
 type LoginProps = {
@@ -46,7 +46,7 @@ const Login = (props: LoginProps) => {
 
   const initialState: EmailState = {
     value: '',
-    isValid: undefined,
+    isValid: null,
   };
   const [emailState, dispatchEmail] = useReducer<
     Reducer<EmailState, EmailAction>
@@ -74,11 +74,11 @@ const Login = (props: LoginProps) => {
     );
   };
 
-  const passwordChangeHandler = (
-    event: React.FormEvent<HTMLInputElement>
-  ) => {
+  const passwordChangeHandler = (event: React.FormEvent<HTMLInputElement>) => {
     setEnteredPassword(event.currentTarget.value);
-    emailState.isValid && enteredPassword.trim().length > 6;
+    setFormIsValid(
+      emailState.isValid! && event.currentTarget.value.trim().length > 6
+    );
   };
 
   const validateEmailHandler = () => {
