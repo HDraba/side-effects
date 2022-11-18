@@ -3,11 +3,7 @@ import AuthContext from '../../store/auth-context';
 
 import classes from './Navigation.module.css';
 
-type NavigationProps = {
-  onLogout: () => void;
-};
-
-const Navigation = (props: NavigationProps) => {
+const Navigation = () => {
   const ctx = useContext(AuthContext)
   return (
     // <AuthContext.Consumer>
@@ -15,19 +11,19 @@ const Navigation = (props: NavigationProps) => {
         // return (
           <nav className={classes.nav}>
             <ul>
-              {ctx.isLoggedIn && (
+              {ctx!.isLoggedIn && (
                 <li>
                   <a href="/">Users</a>
                 </li>
               )}
-              {ctx.isLoggedIn && (
+              {ctx!.isLoggedIn && (
                 <li>
                   <a href="/">Admin</a>
                 </li>
               )}
-              {ctx.isLoggedIn && (
+              {ctx!.isLoggedIn && (
                 <li>
-                  <button onClick={props.onLogout}>Logout</button>
+                  <button onClick={ctx!.onLogout}>Logout</button>
                 </li>
               )}
             </ul>

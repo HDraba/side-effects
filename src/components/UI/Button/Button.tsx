@@ -3,10 +3,10 @@ import React, { PropsWithChildren } from 'react';
 import classes from './Button.module.css';
 
 type ButtonProps = PropsWithChildren<{
-  type: 'button' | 'submit' | 'reset' | undefined;
-  className: string;
+  type?: 'button' | 'submit' | 'reset' | undefined;
+  className?: string;
   onClick?: () => void;
-  disabled: boolean;
+  disabled?: boolean;
 }>;
 
 const Button = (props: ButtonProps) => {
