@@ -1,7 +1,7 @@
 .button {
   font: inherit;
   border: 1px solid #4f005f;
-  background: #4f005f;
+  background: #dd0db0;
   color: white;
   padding: 0.75rem 3.5rem;
   cursor: pointer;
@@ -10,21 +10,25 @@
 }
 
 .button:hover,
+.button:focus, 
 .button:active {
-  background: #741188;
-  border-color: #741188;
+  background: rgb(32, 41, 135);
+  border-color: #ccc;
+
 }
 
-.button:focus {
-  outline: none;
-}
 
 button:disabled,
 button:focus:disabled,
 button:hover:disabled,
 button:active:disabled {
-  background: #ccc;
+  outline: auto;
+  
+  background: rgb(32, 41, 135);
+  color: #f3cafb;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
   border-color: #ccc;
-  color: #666666;
   cursor: not-allowed;
 }
+
+
