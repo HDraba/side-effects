@@ -88,7 +88,7 @@ const Login = (props: LoginProps) => {
       console.log('CLEANUP');
       clearTimeout(identifier);
     };
-  }, [emailState, passwordState]);
+  }, [emailState.isValid, passwordState.isValid]);
 
   const emailChangeHandler = (event: React.FormEvent<HTMLInputElement>) => {
     dispatchEmail({ type: 'USER_INPUT', val: event.currentTarget.value });
